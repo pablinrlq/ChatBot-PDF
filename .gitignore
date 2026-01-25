@@ -1,0 +1,19 @@
+# Ambiente Virtual
+.venv/
+venv/
+env/
+
+# Chaves e Segredos
+.env
+
+# Banco de Dados Vetorial (opcional subir, mas ocupa muito espaço)
+vectorstore/
+
+# Cache do Python e Streamlit
+__pycache__/
+.streamlit/
+*.pyc
+
+# Arquivos de Sistema
+.DS_Store
+Thumbs.db
