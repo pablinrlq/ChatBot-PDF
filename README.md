@@ -1,4 +1,4 @@
-# 🤖 ChatBot PDF Inteligente (RAG)
+# ChatBot PDF Inteligente (RAG)
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)
@@ -8,7 +8,7 @@ Este projeto é um assistente virtual de alta performance que utiliza a técnica
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 O projeto foi construído utilizando as ferramentas mais modernas do ecossistema de IA:
 
@@ -22,7 +22,7 @@ O projeto foi construído utilizando as ferramentas mais modernas do ecossistema
 
 ---
 
-## 💡 O que é RAG?
+## O que é RAG?
 
 Neste projeto, implementamos o **RAG (Retrieval-Augmented Generation)**, que resolve o problema de "alucinação" das IAs tradicionais. O fluxo funciona assim:
 
