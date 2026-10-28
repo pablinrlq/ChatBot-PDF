@@ -32,7 +32,7 @@ def iniciar_chat():
         # allow_dangerous_deserialization é necessário para carregar arquivos .pkl locais
         vectorstore = FAISS.load_local("vectorstore", embeddings, allow_dangerous_deserialization=True)
 
-        # 4. Configura o Gemini (modelo 1.5-flash)
+        # 4. Configura o Gemini
         llm = ChatGoogleGenerativeAI(model="gemini-3-flash-preview", temperature=0.3)
 
         # 5. Configura a Memória do Chat

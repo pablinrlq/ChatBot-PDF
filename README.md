@@ -1,40 +1,85 @@
-# ChatBot PDF Inteligente (RAG)
+<div align="center">
 
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)
-![Google Gemini](https://img.shields.io/badge/Google%20Gemini-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white)
+# ChatBot PDF
 
-Este projeto é um assistente virtual de alta performance que utiliza a técnica de **RAG (Retrieval-Augmented Generation)** para conversar com arquivos PDF. O sistema lê o documento, compreende o contexto e responde perguntas de forma precisa utilizando a inteligência artificial do Google.
+**Converse com qualquer PDF usando RAG.**
 
----
+Você faz uma pergunta, o sistema busca os trechos certos do documento e o Gemini
+responde com base só no que está escrito ali.
 
-## Tecnologias Utilizadas
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=flat-square&logo=langchain&logoColor=white)
+![Google Gemini](https://img.shields.io/badge/Gemini-8E75B2?style=flat-square&logo=googlegemini&logoColor=white)
+![FAISS](https://img.shields.io/badge/FAISS-0467DF?style=flat-square&logo=meta&logoColor=white)
 
-O projeto foi construído utilizando as ferramentas mais modernas do ecossistema de IA:
+</div>
 
-* **Linguagem:** [Python 3.10+](https://www.python.org/)
-* **Interface Web:** [Streamlit](https://streamlit.io/) (UI reativa e amigável)
-* **Modelo de Linguagem (LLM):** [Google Gemini 1.5 Flash](https://aistudio.google.com/)
-* **Orquestração de IA:** [LangChain](https://www.langchain.com/) (Integração de dados e memória)
-* **Banco de Dados Vetorial:** [FAISS](https://github.com/facebookresearch/faiss) (Busca semântica ultra rápida)
-* **Embeddings:** [HuggingFace](https://huggingface.co/) (`all-MiniLM-L6-v2`)
-* **Processamento de PDF:** [PyPDF](https://pypi.org/project/pypdf/)
+## Como funciona
 
----
+```
+PDF ──► pedaços de 1000 caracteres ──► embeddings (HuggingFace, local) ──► índice FAISS
+                                                                              │
+pergunta ──► busca os 3 trechos mais parecidos ◄──────────────────────────────┘
+                     │
+                     └──► Gemini responde usando só esses trechos
+```
 
-## O que é RAG?
+1. **Ingestão** (`src/ingest.py`): lê o PDF, quebra em pedaços com sobreposição de 200 caracteres
+   e gera os vetores com o modelo `all-MiniLM-L6-v2`, que roda na sua máquina, sem custo.
+2. **Busca:** a pergunta vira vetor e o FAISS acha os trechos mais próximos.
+3. **Resposta:** os trechos entram no prompt como contexto, e o Gemini responde em cima deles.
+   Isso reduz bastante a chance de o modelo inventar resposta.
 
-Neste projeto, implementamos o **RAG (Retrieval-Augmented Generation)**, que resolve o problema de "alucinação" das IAs tradicionais. O fluxo funciona assim:
+Tem duas interfaces: uma web com **Streamlit** (`app_web.py`) e uma de terminal com
+memória da conversa (`src/app.py`).
 
-1.  **Recuperação (Retrieval):** Quando você faz uma pergunta, o sistema busca nos "vetores" do FAISS os trechos exatos do seu PDF que contêm a resposta.
-2.  **Aumentação (Augmentation):** O sistema anexa esses trechos como um "contexto de segurança" para a IA.
-3.  **Geração (Generation):** O **Gemini 1.5 Flash** lê o contexto e gera uma resposta baseada estritamente nos dados reais do seu arquivo.
+## Rodando
 
----
+Precisa do Python 3.10+ e de uma chave gratuita do [Google AI Studio](https://aistudio.google.com/).
 
 ```bash
+git clone https://github.com/pablinrlq/ChatBot-PDF.git
+cd ChatBot-PDF
+python -m venv .venv
+.venv\Scripts\activate          # no Linux/Mac: source .venv/bin/activate
+pip install -r requirements.txt
+```
 
-👤 Autor
-Desenvolvido com ☕ e Python por Pablo.
+Crie um arquivo `.env` na raiz:
 
-Nota: Este projeto foi criado para demonstrar a aplicação prática de NLP (Processamento de Linguagem Natural) e integração com APIs de modelos de linguagem de larga escala (LLMs) como proposta da escola de cursos DIO.
+```env
+GOOGLE_API_KEY=sua-chave-aqui
+```
+
+Coloque o PDF em `inputs/documento.pdf`, gere o índice e abra o chat:
+
+```bash
+python src/ingest.py
+streamlit run app_web.py
+```
+
+Prefere o terminal? `python src/app.py`.
+
+## Estrutura
+
+```
+├── app_web.py        interface web (Streamlit)
+├── src/
+│   ├── ingest.py     lê o PDF e cria o índice vetorial
+│   └── app.py        chat no terminal com memória
+├── inputs/           PDF de entrada
+└── requirements.txt
+```
+
+## O que aprendi
+
+- Como RAG funciona na prática: chunking, embeddings, busca vetorial e montagem do prompt
+- Que dá para rodar a parte de embeddings localmente e pagar só pela geração
+- Tamanho e sobreposição dos pedaços mudam muito a qualidade da resposta
+
+---
+
+<div align="center">
+<sub>Feito por <a href="https://github.com/pablinrlq">Pablo Moises</a> · projeto do bootcamp da DIO</sub>
+</div>

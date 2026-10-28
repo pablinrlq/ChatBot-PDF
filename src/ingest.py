@@ -27,7 +27,7 @@ def processar_documentos():
     chunks = text_splitter.split_documents(documentos)
     print(f"   -> Gerados {len(chunks)} fragmentos de texto.")
 
-    # AQUI ESTÁ A PERNA DO ALEIJADO: Usando HuggingFace pq nos somos foda
+    # Embeddings rodam localmente com HuggingFace, sem custo de API
     print("🧠 Gerando Embeddings com HuggingFace (100% Local)...")
     embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     
